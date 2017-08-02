@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			.box{
+				width: 900px;
+				height: 500px;
+				position: relative;
+				background: url("images/bg.png");
+				margin:0 auto;
+			}
+			.box1{
+				width: 337px;
+				height: 189px;
+				position: absolute;
+				left: 147px;
+				top: 155px;
+				background: url("images/img.png");
+			}
+			.box2{
+				width: 182px;
+				height: 182px;
+				border-radius: 50%;
+				position: absolute;
+				top: 158px;
+				right: 131px;
+				overflow: hidden;
+				
+			}
+			#box2bg{
+				width: 1348px;
+				height: 756px;
+				position: absolute;
+				background:url("images/img.png") no-repeat;
+				background-size: 100%;
+				background-position: 0px 0px;
+			}
+			#kuang{
+				display: none;
+				width: 45.5px;
+				height: 45.5px;
+				border-radius: 50%;
+				position: absolute;
+				background: rgba(0,0,0,0.4);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<div class="box1">
+				<div id='kuang'></div>
+			</div>
+			<div class="box2">
+				<div id='box2bg'></div>
+			</div>
+			
+		</div>
+		<script src="utils.js"></script>
+		<script>
+			var kuang=$('#kuang')
+			var disX=0,disY=0;
+			var box=$('.box')[0]
+			var box1=$('.box1')[0];
+			var box2=$('.box2')[0]
+			var box2bg=$('#box2bg');
+			
+			
+			box1.onmouseover=function(ev){//在鼠标移入图片时，显示小放大镜
+				kuang.style.display='block';
+				disX=ev.clientX-kuang.offsetLeft;//事件发生时，鼠标位置距放大镜左侧和上侧的距离
+				 disY = ev.clientY - kuang.offsetTop;
+				 
+				var maxX = box1.clientWidth - kuang.clientWidth;//获取小放大镜能移动的最大偏移量
+				var maxY = box1.clientHeight - kuang.clientHeight;
+				
+				var l=0,t=0;
+				document.onmousemove = function (ev){//移动小放大镜
+					 l = ev.clientX-kuang.clientWidth/2-box1.offsetLeft-box.offsetLeft;//距定位父级的左侧偏移量和上侧偏移量
+					 t = ev.clientY-kuang.clientHeight/2-box1.offsetTop;
+					console.log(ev.clientY,box1.clientHeight/2)
+					if(l < 0) {//限制小放大镜的活动范围
+						l = 0;
+					}
+					if(t < 0){
+						t = 0;
+					}
+
+					if(l >= maxX){
+						l = maxX;
+					}
+					if(t >= maxY){
+						t = maxY;
+					}
+
+					kuang.style.left = l + 'px';
+					kuang.style.top = t + 'px';
+					
+					var maxX2=box2bg.clientWidth - box2.clientWidth;//右侧大图背景移动的最大偏移量
+					var maxY2=box2bg.clientHeight - box2.clientHeight;
+					
+					box2bg.style.backgroundPositionX=-maxX2*l/maxX+'px';
+					box2bg.style.backgroundPositionY=-maxY2*t/maxY+'px';
+				};
+				
+			}
+			box1.onmouseout=function(){//鼠标移出图片时，小放大镜隐藏，并回到初始位置，右侧放大镜也回到0
+				document.onmousemove = null;
+				kuang.style.display='none';
+				kuang.style.left=0;
+				kuang.style.top=0;
+				box2bg.style.backgroundPositionX=0;
+				box2bg.style.backgroundPositionY=0
+			}
+			
+				 
+				
+					
+					
+			
+			
+		</script>
+	</body>
+</html>
